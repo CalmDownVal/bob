@@ -1,0 +1,19 @@
+{
+	"name" : "@calmdownval/bob",
+	"description" : "simple webhook-based automation boilerplate",
+	"version" : "1.0.0",
+	"type": "module",
+	"private": true,
+	"dependencies": {
+		"@octokit/webhooks": "7.21.x",
+		"eventsource": "1.0.x"
+	},
+	"peerDependencies": {
+		"pm2": "4.x.x"
+	},
+	"scripts": {
+		"start:dev": "pm2 start ecosystem.json --watch --no-daemon",
+		"start": "pm2 start ecosystem.json",
+		"stop": "pm2 stop ecosystem.json"
+	}
+}
