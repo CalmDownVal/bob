@@ -1,11 +1,8 @@
-import { makeConfig } from './config';
-import { Listener } from './Listener';
+import { useEnvConfig } from './lib/config';
+import { Listener } from './lib/Listener';
 
-// default configuration, can be overridden with env variables
-const config = makeConfig({
-	GITHUB_SECRET: '',
-	SOURCE_URL: ''
-});
+// swap for `useInlineConfig` to define config in this file
+const config = useEnvConfig();
 
 // listen for GitHub events
 new Listener(config)

@@ -6,6 +6,7 @@
 	"private": true,
 	"dependencies": {
 		"@octokit/webhooks": "7.21.x",
+		"dotenv": "8.2.x",
 		"eventsource": "1.0.x"
 	},
 	"peerDependencies": {

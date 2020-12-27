@@ -2,7 +2,7 @@
 	"apps": [
 		{
 			"name": "bob-automation",
-			"script": "node --experimental-modules --es-module-specifier-resolution=node ./src/index.js"
+			"script": "node --experimental-modules --es-module-specifier-resolution=node ./index.js"
 		}
 	]
 }
