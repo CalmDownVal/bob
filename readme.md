@@ -39,6 +39,9 @@ Assign event handlers using the `.on` method of a `Listener` instance; Some
 very basic examples are present in the `service.js` file. These handlers can
 be asynchronous.
 
+The handlers receive unmodified event payloads as they are received from GitHub.
+You can find [their definitions here](https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads).
+
 ### 5. Start the Service
 
 To start the service run `yarn start` from the command line. The service will be
