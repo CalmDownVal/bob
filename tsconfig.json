@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"charset": "utf8",
+		"declaration": true,
+		"lib": [
+			"esnext"
+		],
+		"module": "commonjs",
+		"newLine": "lf",
+		"outDir": "./build",
+		"removeComments": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"target": "es5",
+		"types": [
+			"node"
+		]
+	},
+	"include": [
+		"./src/**/*.ts"
+	]
+}

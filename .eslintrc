@@ -1,0 +1,10 @@
+{
+	"root": true,
+	"extends": [
+		"@calmdownval/eslint-config",
+		"@calmdownval/eslint-config/typescript"
+	],
+	"env": {
+		"node": true
+	}
+}

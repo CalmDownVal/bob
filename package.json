@@ -1,20 +1,30 @@
 {
 	"name" : "@calmdownval/bob",
-	"description" : "simple webhook-based automation boilerplate",
+	"description" : "Simple GitHub webhook event source listener",
 	"version" : "1.0.0",
-	"type": "module",
-	"private": true,
-	"dependencies": {
-		"@octokit/webhooks": "7.21.x",
-		"dotenv": "8.2.x",
-		"eventsource": "1.0.x"
-	},
-	"peerDependencies": {
-		"pm2": "4.x.x"
+	"license": "ISC",
+	"type": "commonjs",
+	"main": "./build/index.js",
+	"types": "./build/index.d.ts",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/CalmDownVal/bob.git"
 	},
 	"scripts": {
-		"start:dev": "pm2 start ecosystem.json --watch --no-daemon",
-		"start": "pm2 start ecosystem.json",
-		"stop": "pm2 stop ecosystem.json"
+		"build": "./script/build.sh",
+		"prepublishOnly": "yarn build"
+	},
+	"dependencies": {
+		"@calmdownval/signal": ">=1.0.3"
+	},
+	"devDependencies": {
+		"@calmdownval/eslint-config": "CalmDownVal/eslint-config",
+		"@types/node": "14.14.x",
+		"@typescript-eslint/eslint-plugin": "4.12.x",
+		"@typescript-eslint/parser": "4.12.x",
+		"eslint": "7.17.x",
+		"eslint-import-resolver-typescript": "2.3.x",
+		"eslint-plugin-import": "2.22.x",
+		"typescript": "4.1.x"
 	}
 }
