@@ -25,7 +25,7 @@
 
 "@calmdownval/eslint-config@CalmDownVal/eslint-config":
   version "0.0.0"
-  resolved "https://codeload.github.com/CalmDownVal/eslint-config/tar.gz/4bde650396a7d3dc3c59d3d30e8f5fe56abbb441"
+  resolved "https://codeload.github.com/CalmDownVal/eslint-config/tar.gz/67255b838baffbb7f56a95e77cefeb7baee8a695"
 
 "@calmdownval/signal@1.0.3":
   version "1.0.3"

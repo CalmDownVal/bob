@@ -12,7 +12,9 @@ function hasBOM(buffer: Buffer) {
 	);
 }
 
-export type Event = Record<string, string | undefined>;
+export interface Event {
+	[field: string]: string | undefined;
+}
 
 export interface Parser {
 	(chunk: Buffer): void;

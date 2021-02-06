@@ -42,7 +42,7 @@ export class Signature {
 		return new Signature(
 			algorithm,
 			createHmac(algorithm, secret)
-				.update(typeof payload === 'string' ? payload : serialize(payload))
+				.update(typeof payload === 'string' ? payload : serialize(payload), 'utf8')
 				.digest('hex')
 		);
 	}

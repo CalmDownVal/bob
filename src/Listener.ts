@@ -5,10 +5,28 @@ import * as Signal from '@calmdownval/signal';
 import { EventSource, Message } from './EventSource';
 import { Signature } from './Signature';
 
-const H_DELIVERY = 'X-GitHub-Delivery';
-const H_EVENT_NAME = 'X-GitHub-Event';
-const H_SIGNATURE = 'X-Hub-Signature-256';
-const H_SIGNATURE_ALT = 'X-Hub-Signature';
+// header names here must be lowercase
+const H_DELIVERY = 'x-github-delivery';
+const H_EVENT_NAME = 'x-github-event';
+const H_SIGNATURE = 'x-hub-signature-256';
+const H_SIGNATURE_ALT = 'x-hub-signature';
+
+function getHeader(record: Record<string, unknown>, headerNameLC: string) {
+	const direct = record[headerNameLC];
+	if (typeof direct === 'string') {
+		return direct;
+	}
+
+	for (const key in record) {
+		const keyLC = key.toLowerCase();
+		const value = record[key];
+		if (keyLC === headerNameLC && typeof value === 'string') {
+			return value;
+		}
+	}
+
+	return null;
+}
 
 export interface ListenerOptions {
 	readonly sourceURL: string;
@@ -17,9 +35,10 @@ export interface ListenerOptions {
 }
 
 export interface GitHubEvent<T = unknown> {
-	data: T;
 	event: string;
+	headers: Record<string, string>;
 	id: string;
+	payload: T;
 }
 
 export class Listener {
@@ -47,30 +66,31 @@ export class Listener {
 
 	private readonly _onMessage = (message: Message) => {
 		try {
-			const data = JSON.parse(message.data);
+			const record = JSON.parse(message.data);
+			const payload = record.body;
 
-			const event = data[H_EVENT_NAME];
-			if (typeof event !== 'string') {
+			const event = getHeader(record, H_EVENT_NAME);
+			if (event === null) {
 				throw new Error('missing or invalid event name header');
 			}
 
-			if (!this.signal[Listener.ANY_EVENT] && !this.signal[event]) {
+			if (!this.signal[event] && !this.signal[Listener.ANY_EVENT]) {
 				return;
 			}
 
-			const id = data[H_DELIVERY];
-			if (typeof id !== 'string') {
+			const id = getHeader(record, H_DELIVERY);
+			if (id === null) {
 				throw new Error('missing or invalid delivery (id) header');
 			}
 
 			if (this.secret) {
-				const signature = data[H_SIGNATURE] || data[H_SIGNATURE_ALT];
-				if (typeof signature !== 'string') {
+				const signature = getHeader(record, H_SIGNATURE) ?? getHeader(record, H_SIGNATURE_ALT);
+				if (signature === null) {
 					throw new Error('missing or invalid signature header');
 				}
 
 				if (!Signature.verify({
-					payload: data.body,
+					payload,
 					secret: this.secret,
 					signature
 				})) {
@@ -79,9 +99,17 @@ export class Listener {
 			}
 
 			const obj = {
-				data: data.body,
 				event,
-				id
+				headers: {
+					...record,
+
+					// keys mixed into the record that don't correspond to a header
+					body: undefined,
+					query: undefined,
+					timestamp: undefined
+				},
+				id,
+				payload
 			};
 
 			this.signal[Listener.ANY_EVENT]?.(obj);
