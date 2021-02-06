@@ -25,9 +25,9 @@
 
 "@calmdownval/eslint-config@CalmDownVal/eslint-config":
   version "0.0.0"
-  resolved "https://codeload.github.com/CalmDownVal/eslint-config/tar.gz/0490ee04300c07146006e69f76901e6495bbed91"
+  resolved "https://codeload.github.com/CalmDownVal/eslint-config/tar.gz/4bde650396a7d3dc3c59d3d30e8f5fe56abbb441"
 
-"@calmdownval/signal@>=1.0.3":
+"@calmdownval/signal@1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@calmdownval/signal/-/signal-1.0.3.tgz#cffb702d98c607962c012b9b8791bcb497b1d470"
   integrity sha512-Db7Uyqk0CzwJq7vFEO5tYhTrMb0p+gPtCM9OGEnDTaJwGAOaIR4n6PzDRYSvYWI3xPaWlIXcv7Yoh+Bp+1to2g==
