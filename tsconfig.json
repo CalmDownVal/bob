@@ -8,7 +8,6 @@
 		"moduleResolution": "node",
 		"newLine": "lf",
 		"noEmit": true,
-		"outDir": "./build",
 		"removeComments": true,
 		"rootDir": "./src",
 		"skipLibCheck": true,
