@@ -4,48 +4,76 @@ A simple local(host) builder who likes to listen to GitHub webhooks.
 
 ## Usage Guide
 
-### 1. Clone the Repository and Install Dependencies
+### 1. Install Bob
 
-This project was built and tested with Yarn and it is therefore preferable to
-always install dependencies that way. Other package managers should, however,
-work as well.
+You will also need to install the
+[Signal](https://github.com/CalmDownVal/signal) peer dependency.
 
-### 2. Register GitHub Webhook(s)
+```sh
+# using NPM
+npm install @calmdownval/bob @calmdownval/signal
 
-Make sure to [set a proper secret](https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/securing-your-webhooks)
-when registering webhooks. While optional on GitHub, it is required by
-[@octokit/webhooks.js](https://github.com/octokit/webhooks.js).
+# using Yarn
+yarn add @calmdownval/bob @calmdownval/signal
+```
 
-This boilerplate is intended to work on localhost without the need for any
-public endpoints. This is achieved by using a proxy service like
-[smee.io](https://smee.io/).
+### 2. Register GitHub Webhooks
 
-### 3. Configuration
+This package is intended to be used on localhost without the need for any public
+endpoints. This is possible using proxy services like
+[smee.io](https://smee.io/). Once you have a channel ready use that as your
+webhook URL.
 
-Configuration is done via a `.env` file (or by directly setting relevant
-environment variables). If env variables need to be avoided for any reason, swap
-the `useEnvConfig` function for `useInlineConfig` in the `service.js` file and
-pass the configuration through an inline object.
+Make sure to
+[set a proper secret](https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/securing-your-webhooks)
+when registering webhooks. It is an optional feature, but when using a proxy
+it is the only reliable way to ensure that events you receive are in fact from
+GitHub.
 
-| key                   | type     | default |
-|-----------------------|----------|---------|
-| `GITHUB_SECRET`       | string   | -       |
-| `SOURCE_URL`          | string   | -       |
-| `REJECT_UNAUTHORIZED` | boolean? | true    |
+### 3. Create a Listener
 
-### 4. Define Event Handlers
+Create a new instance of the `Listener` class with configuration to suit your
+needs.
 
-Assign event handlers using the `.on` method of a `Listener` instance; Some
-very basic examples are present in the `service.js` file. These handlers can
-be asynchronous.
+You can use the `tls` key to pass through any options accepted by
+[NodeJS' TLS Socket](https://nodejs.org/dist/latest-v15.x/docs/api/tls.html#tls_new_tls_tlssocket_socket_options),
+typically certificates or `rejectUnauthorized` for development environments.
 
-The handlers receive unmodified event payloads as they are received from GitHub.
-You can find [their definitions here](https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads).
+```ts
+import { Listener } from '@calmdownval/bob';
 
-### 5. Start the Service
+const listener = new Listener({
+  secret: '<your-secret>',
+  sourceURL: '<webhook-proxy-url>',
+  tls: {
+    rejectUnauthorized: false
+  }
+});
 
-To start the service run `yarn start` from the command line. The service will be
-managed by [PM2](https://pm2.keymetrics.io/).
+```
 
-Once running you can use PM2's commands to monitor the status. To stop run
-`yarn stop` from the command line and the service should gracefully exit.
+### 4. Bind Event Handlers
+
+Assign event handlers using the
+[Signal](https://github.com/CalmDownVal/signal#adding-handlers)
+library to signals provided by the `Listener` instance. The handlers receive
+unmodified event payloads as they are received from GitHub. You can find
+[their definitions here](https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads).
+
+```ts
+import * as Signal from '@calmdownval/signal';
+
+Signal.on(listener.event<any>('push'), ({ data: e }) => {
+  console.log(`${e.sender.login} pushed ${e.commits.length} commits into ${e.repository.full_name}.`);
+});
+```
+
+The `event` method of the `Listener` class returns a signal triggered when the
+GitHub webhook specified by the first argument is invoked. If you omit this
+argument or use the `Listener.ANY_EVENT` constant you will receive a signal that
+triggers on *any* GitHub webhook received. This is useful if you wish to switch
+between event types manually.
+
+Using the type argument of the `event` method you can inject typings of the
+event. GitHub webhook typings are out of scope of this library, instead consider
+using [@octokit/webhooks-definitions](https://github.com/octokit/webhooks).
