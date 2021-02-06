@@ -4,9 +4,11 @@ const ASCII_COLON = 58;
 
 function hasBOM(buffer: Buffer) {
 	return (
+		/* eslint-disable @typescript-eslint/no-magic-numbers */
 		buffer[0] === 239 &&
 		buffer[1] === 187 &&
 		buffer[2] === 191
+		/* eslint-enable */
 	);
 }
 
@@ -59,6 +61,8 @@ export function createParser(callback: (event: Event) => void, options: ParserOp
 
 		if (isFirst) {
 			if (hasBOM(buffer)) {
+				// BOM is three bytes long, skip it
+				// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 				lineStart = 3;
 			}
 

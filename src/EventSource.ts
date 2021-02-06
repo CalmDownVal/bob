@@ -30,7 +30,7 @@ interface ProxyTarget {
 	protocol: string;
 }
 
-interface EventSourceOptionsInternal extends Required<ParserOptions> {
+interface OptionsInternal extends Required<ParserOptions> {
 	createConnection?: CreateConnection;
 	headers: OutgoingHttpHeaders;
 	ignoredEvents: IgnoreMap;
@@ -46,14 +46,14 @@ export interface EventSourceOptions extends ParserOptions {
 	readonly tls?: TlsOptions;
 }
 
-export interface EventSourceMessage {
+export interface Message {
 	data: string;
 	event?: string;
 	id?: string;
 	origin: string;
 }
 
-export enum EventSourceState {
+export enum State {
 	Connecting = 0,
 	Open = 1,
 	Closed = 2
@@ -61,10 +61,10 @@ export enum EventSourceState {
 
 export class EventSource {
 	public readonly error = Signal.createSync<Error>();
-	public readonly message = Signal.createSync<EventSourceMessage>();
+	public readonly message = Signal.createSync<Message>();
 	public readonly stateChange = Signal.createSync();
 
-	private readonly _options: EventSourceOptionsInternal;
+	private readonly _options: OptionsInternal;
 	private _isConnecting = false;
 	private _lastEventId: string | null = null;
 	private _origin: string | null = null;
@@ -72,7 +72,7 @@ export class EventSource {
 	private _reconnectInterval = DEFAULT_RECONNECT_INTERVAL;
 	private _reconnectUrl: string | null = null;
 	private _request: ClientRequest | null = null;
-	private _state = EventSourceState.Connecting;
+	private _state = State.Connecting;
 	private _url: string;
 
 	public constructor(
@@ -90,8 +90,8 @@ export class EventSource {
 			createConnection,
 			headers: {
 				...headers,
-				'Accept': 'text/event-stream',
-				'Cache-Control': 'no-cache'
+				'accept': 'text/event-stream',
+				'cache-control': 'no-cache'
 			},
 			ignoredEvents: ignoredEvents.reduce<IgnoreMap>((map, eventName) => {
 				map[eventName] = true;
@@ -123,20 +123,20 @@ export class EventSource {
 	}
 
 	public close() {
-		if (this._state === EventSourceState.Closed) {
+		if (this._state === State.Closed) {
 			return;
 		}
 
-		this._setState(EventSourceState.Closed);
+		this._setState(State.Closed);
 		this._request?.destroy();
 	}
 
 	private _reconnect() {
-		if (this._state === EventSourceState.Closed) {
+		if (this._state === State.Closed) {
 			return;
 		}
 
-		this._setState(EventSourceState.Connecting);
+		this._setState(State.Connecting);
 		if (this._reconnectUrl !== null) {
 			this._url = this._reconnectUrl;
 			this._reconnectUrl = null;
@@ -145,7 +145,7 @@ export class EventSource {
 		setTimeout(this._connect, this._reconnectInterval);
 	}
 
-	private _setState(state: EventSourceState) {
+	private _setState(state: State) {
 		if (this._state !== state) {
 			this._state = state;
 			this.stateChange();
@@ -244,7 +244,7 @@ export class EventSource {
 			this._reconnect();
 		};
 
-		this._setState(EventSourceState.Open);
+		this._setState(State.Open);
 		this._parser = createParser(this._onStreamEvent, this._options);
 
 		response.on('close', onCloseOrEnd);

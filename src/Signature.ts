@@ -1,7 +1,7 @@
 import { createHmac, timingSafeEqual } from 'crypto';
 
 function serialize(payload: unknown) {
-	return JSON.stringify(payload).replace(/(?<!\\)\\u[0-9a-f]{4}/g, match => `\\u${match.slice(2)}`);
+	return JSON.stringify(payload).replace(/(?<!\\)\\u[0-9a-f]{4}/g, match => `\\u${match.slice(2).toUpperCase()}`);
 }
 
 const algorithms = [ 'sha1', 'sha256' ] as const;
