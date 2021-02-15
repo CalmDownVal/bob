@@ -1,7 +1,7 @@
 {
 	"name": "@calmdownval/bob",
 	"description": "Simple GitHub webhook event source listener",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"license": "ISC",
 	"type": "commonjs",
 	"main": "./build/index.cjs.min.js",

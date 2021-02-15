@@ -31,7 +31,7 @@ export function createParser(callback: (event: Event) => void, options: ParserOp
 	let keyCount = 0;
 
 	const processLine = (lineStart: number, lineEnd: number, colonIndex: number | null) => {
-		if (colonIndex === lineEnd) {
+		if (colonIndex === lineStart) {
 			// skip comment lines starting with a colon
 			return;
 		}
