@@ -10,6 +10,7 @@ export type Algorithm = typeof algorithms[number];
 
 export interface SignArgs {
 	readonly algorithm?: Algorithm;
+	readonly payload: unknown;
 	readonly secret: string;
 }
 
@@ -38,7 +39,7 @@ export class Signature {
 		);
 	}
 
-	public static sign(payload: unknown, { algorithm = 'sha1', secret }: SignArgs) {
+	public static sign({ algorithm = 'sha1', payload, secret }: SignArgs) {
 		return new Signature(
 			algorithm,
 			createHmac(algorithm, secret)
@@ -47,11 +48,11 @@ export class Signature {
 		);
 	}
 
-	public static verify(args: VerifyArgs) {
-		const { payload, secret } = args;
-		const signature0 = typeof args.signature === 'string' ? Signature.parse(args.signature) : args.signature;
-		const signature1 = Signature.sign(payload, {
+	public static verify({ payload, secret, signature }: VerifyArgs) {
+		const signature0 = typeof signature === 'string' ? Signature.parse(signature) : signature;
+		const signature1 = Signature.sign({
 			algorithm: signature0.algorithm,
+			payload,
 			secret
 		});
 

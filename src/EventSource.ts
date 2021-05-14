@@ -17,7 +17,7 @@ const HTTP_FOUND = 302;
 const HTTP_TEMPORARY_REDIRECT = 307;
 
 interface CreateConnection {
-	(options: ClientRequestArgs, oncreate: (error: Error, socket: Socket) => void): Socket;
+	(options: ClientRequestArgs, onCreate: (error: Error, socket: Socket) => void): Socket;
 }
 
 interface IgnoreMap {
