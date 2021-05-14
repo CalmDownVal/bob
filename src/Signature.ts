@@ -6,7 +6,7 @@ function serialize(payload: unknown) {
 
 const algorithms = [ 'sha1', 'sha256' ] as const;
 
-export type Algorithm = typeof algorithms extends readonly (infer T)[] ? T : never;
+export type Algorithm = typeof algorithms[number];
 
 export interface SignArgs {
 	readonly algorithm?: Algorithm;
