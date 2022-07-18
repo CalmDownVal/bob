@@ -42,8 +42,7 @@ export interface GitHubEvent<T = unknown> {
 }
 
 export class Listener {
-	public static readonly ANY_EVENT = '*';
-	public readonly error = Signal.createSync<Error>();
+	public readonly error = Signal.create<Error>();
 
 	private readonly secret?: string;
 	private readonly signal: Record<string, Signal.SyncSignal<GitHubEvent> | undefined> = {};
@@ -61,7 +60,7 @@ export class Listener {
 	}
 
 	public event<T = unknown>(name: string = Listener.ANY_EVENT) {
-		return (this.signal[name] ?? (this.signal[name] = Signal.createSync<GitHubEvent>())) as Signal.SyncSignal<GitHubEvent<T>>;
+		return (this.signal[name] ?? (this.signal[name] = Signal.create<GitHubEvent>())) as Signal.SyncSignal<GitHubEvent<T>>;
 	}
 
 	private readonly _onMessage = (message: Message) => {
@@ -116,7 +115,9 @@ export class Listener {
 			this.signal[event]?.(obj);
 		}
 		catch (ex) {
-			this.error(ex);
+			this.error(ex as Error);
 		}
 	};
+
+	public static readonly ANY_EVENT = '*';
 }

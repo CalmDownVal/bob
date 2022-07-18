@@ -1,16 +1,17 @@
 {
 	"name": "@calmdownval/bob",
 	"description": "Simple GitHub webhook event source listener",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"license": "ISC",
 	"type": "commonjs",
 	"main": "./build/index.cjs.min.js",
-	"module": "./build/index.esm.min.js",
+	"module": "./build/index.esm.min.mjs",
 	"types": "./build/index.d.ts",
 	"exports": {
 		".": {
 			"require": "./build/index.cjs.min.js",
-			"default": "./build/index.esm.min.js"
+			"default": "./build/index.esm.min.mjs",
+			"types": "./build/index.d.ts"
 		}
 	},
 	"repository": {
@@ -22,23 +23,23 @@
 		"prepublishOnly": "yarn build"
 	},
 	"peerDependencies": {
-		"@calmdownval/signal": ">=1.0.3"
+		"@calmdownval/signal": ">=4.1.0"
 	},
 	"devDependencies": {
-		"@calmdownval/eslint-config": "CalmDownVal/eslint-config",
-		"@calmdownval/signal": "1.0.3",
-		"@rollup/plugin-typescript": "8.1.x",
-		"@rollup/plugin-node-resolve": "11.1.x",
-		"@types/node": "14.14.x",
-		"@typescript-eslint/eslint-plugin": "4.12.x",
-		"@typescript-eslint/parser": "4.12.x",
-		"eslint": "7.17.x",
-		"eslint-import-resolver-typescript": "2.3.x",
-		"eslint-plugin-import": "2.22.x",
-		"rollup": "2.38.x",
-		"rollup-plugin-dts": "2.0.x",
-		"rollup-plugin-terser": "7.0.x",
-		"typescript": "4.1.x",
-		"tslib": "2.1.x"
+		"@calmdownval/eslint-config": "1.0.1",
+		"@calmdownval/eslint-import-resolver-typescript": "1.1.2",
+		"@calmdownval/signal": "4.1.0",
+		"@rollup/plugin-typescript": "8.3.3",
+		"@rollup/plugin-node-resolve": "13.3.0",
+		"@types/node": "18.0.6",
+		"@typescript-eslint/eslint-plugin": "5.30.7",
+		"@typescript-eslint/parser": "5.30.7",
+		"eslint": "8.20.0",
+		"eslint-plugin-import": "2.26.0",
+		"rollup": "2.77.0",
+		"rollup-plugin-dts": "4.2.2",
+		"rollup-plugin-terser": "7.0.2",
+		"typescript": "4.7.4",
+		"tslib": "2.4.0"
 	}
 }

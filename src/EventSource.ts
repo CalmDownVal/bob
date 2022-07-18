@@ -60,9 +60,9 @@ export enum State {
 }
 
 export class EventSource {
-	public readonly error = Signal.createSync<Error>();
-	public readonly message = Signal.createSync<Message>();
-	public readonly stateChange = Signal.createSync();
+	public readonly error = Signal.create<Error>();
+	public readonly message = Signal.create<Message>();
+	public readonly stateChange = Signal.create();
 
 	private readonly _options: OptionsInternal;
 	private _isConnecting = false;

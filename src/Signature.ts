@@ -26,6 +26,10 @@ export class Signature {
 		public readonly hash: string
 	) {}
 
+	public toString() {
+		return `${this.algorithm}=${this.hash}`;
+	}
+
 	public static parse(signature: string) {
 		const index = signature.indexOf('=');
 		const algorithm = index === -1 ? 'sha1' : signature.slice(0, index) as Algorithm;
@@ -60,9 +64,5 @@ export class Signature {
 			Buffer.from(signature0.hash, 'hex'),
 			Buffer.from(signature1.hash, 'hex')
 		);
-	}
-
-	public toString() {
-		return `${this.algorithm}=${this.hash}`;
 	}
 }

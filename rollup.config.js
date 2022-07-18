@@ -11,7 +11,7 @@ export default [
 				format: 'cjs'
 			},
 			{
-				file: './build/index.esm.min.js',
+				file: './build/index.esm.min.mjs',
 				format: 'esm'
 			}
 		],
